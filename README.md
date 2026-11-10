@@ -74,7 +74,7 @@ Every dose is within 2 standard errors of the difference. Bitter suppresses MN9 
 
 ![2](./figures/r2_teacher_validation.png)
 
-The port runs at 6,354 trials/hour at batch 256, so the 3000-condition × 4-trial dataset took about 1.9 hrs. The Brian2 reference took 1793 s with 30 processes.
+The port runs at 6,354 trials/hour at batch 256, so the 3000-condition  times 4-trial dataset took about 1.9 hrs. The Brian2 reference took 1793 s with 30 processes.
 
 We passed on all three checks (MN9 dose response, bitter suppression, network-wide rates r > 0.9). `runs/r2_teacher_validation/20260929-130111`.
 
@@ -89,7 +89,7 @@ We passed on all three checks (MN9 dose response, bitter suppression, network-wi
 *The dataset*
 <hr/>
 
-3000 taste cocktails × 4 trials, 50 bins of 20 ms, 5000 neurons = 3 GB. Generated in 1.95 hours.
+3000 taste cocktails  times 4 trials, 50 bins of 20 ms, 5000 neurons = 3 GB. Generated in 1.95 hours.
 
 **73.4% of the circuit never fired at all.** Those get excluded from R² later. Only ~1,330 of 5,000 neurons carry any signal, and 90.4% fire below 1 Hz on average. Median neuron rate: 0.0 Hz. MN9 during stimulus: 10th/50th/90th percentile 0.0 / 5.0 / 72.5 Hz.
 
@@ -117,7 +117,7 @@ So "low frequency" here is not a smooth near zero mode. There is no eigenvalue a
 
 Why try magnetic at all? 40,566 of 76,672 reciprocal connections have opposite signs (one side excites, the other inhibits)... those cancel when you symmetrize. That's 53% of all reciprocal pairs. The magnetic version keeps direction instead of cancelling it. But this run does not show that the magnetic version helps. Nothing here tests whether the magnetic basis recovers the information the symmetric one cancels. Also at the resolution of the localization figure the two bases look nearly identical. Test later!
 
-The localization figure (log2 of a band's mean energy in a hop group, versus a mode spread evenly over all neurons) says less than I hoped :( . Most neurons are two hops from the taste neurons (4,309 of 5,000) and two hops from MN9 (4,648 of 5,000)... for those the enrichment is within ±0.02 in every band... the bulk of the circuit is unremarkable. All the action is in the small groups. Taste neurons themselves (88) are enriched in band 3 and depleted in band 1. Near MN9, the outer bands (1 and 4) put about 2× the uniform energy on the 2 MN9 neurons themselves, while the two middle bands nearly avoid them (6-7× below uniform). But that's two specific neurons, and I'm not generalizing it to "output neurons" or anything broader...
+The localization figure (log2 of a band's mean energy in a hop group, versus a mode spread evenly over all neurons) says less than I hoped :( . Most neurons are two hops from the taste neurons (4,309 of 5,000) and two hops from MN9 (4,648 of 5,000)... for those the enrichment is within ±0.02 in every band... the bulk of the circuit is unremarkable. All the action is in the small groups. Taste neurons themselves (88) are enriched in band 3 and depleted in band 1. Near MN9, the outer bands (1 and 4) put about 2 times the uniform energy on the 2 MN9 neurons themselves, while the two middle bands nearly avoid them (6-7 times below uniform). But that's two specific neurons, and I'm not generalizing it to "output neurons" or anything broader...
 
 ![4](./figures/r3_band_localization.png)
 
@@ -160,7 +160,7 @@ Honestly, almost every graph model hit the 40-epoch cap and was still improving.
 
 The check passed... the mean predictor scores 0.145, well under 0.8, so the task discriminates between models. `runs/p2_r4_baselines/20260930-185745`
 
-Learning rate detour... because it was a real decision. The first pilot (3 rates, 6 epochs, 300 conditions) picked 3e-3 for every family by final val loss. That's the edge of the grid, and val loss and normalised R² disagreed about the best rate. So I killed the sweep and ran an extended pilot (5 rates, 15 epochs). The two criteria then agreed and chose 3e-2 for the MoE and chebgru families. I overrode that to 1e-2... 3e-2 was again the grid edge, the gain over 1e-2 was marginal, the MLP collapsed at 3e-2, then the real runs take ~7× more steps at the peak rate than the pilot. I traded a few percent of val loss for safety. The MLP kept its own interior optimum of 3e-3.
+Learning rate detour... because it was a real decision. The first pilot (3 rates, 6 epochs, 300 conditions) picked 3e-3 for every family by final val loss. That's the edge of the grid, and val loss and normalised R² disagreed about the best rate. So I killed the sweep and ran an extended pilot (5 rates, 15 epochs). The two criteria then agreed and chose 3e-2 for the MoE and chebgru families. I overrode that to 1e-2... 3e-2 was again the grid edge, the gain over 1e-2 was marginal, the MLP collapsed at 3e-2, then the real runs take ~7 times more steps at the peak rate than the pilot. I traded a few percent of val loss for safety. The MLP kept its own interior optimum of 3e-3.
 
 ## 5 ½. ???
 
@@ -193,7 +193,7 @@ This step is what the whole project was built for. My 4 dampedwave experts, one 
 Two questions I have. Checked by the rule I place before seeing any of it... a difference counts only if the mean paired difference across seeds beats twice the seed-to-seed spread and every seed agrees on the sign. Gotta make Rules to check my hypothesising. This da real science.
 
 + Rule 1 (non-collapse): does moe_full beat moe_linear? If not, the architecture is an expensive linear filter.
-+ Rule 2 (specialisation): in at least 2 of 3 seeds, do two experts in some layer have channel-median timescales differing by 2× or more?
++ Rule 2 (specialisation): in at least 2 of 3 seeds, do two experts in some layer have channel-median timescales differing by 2 times or more?
 
 ![6](./Images/sixth.jpg)
 
@@ -203,13 +203,13 @@ The full model beat its linear ablation in all three seeds (never worse) and sti
 
 **Results of Rule 2:**
 
-It **passes**. Max timescale ratios of 1.67 / 2.11 / 9.48, so two of three seeds clear 2×. I have to read 9.48 with caution however...
+It **passes**. Max timescale ratios of 1.67 / 2.11 / 9.48, so two of three seeds clear 2 times. I have to read 9.48 with caution however...
 
 ![6](./figures/r5_expert_kernels.png)
 
-In seed 2, layer 2, band 1 is the only expert in these runs that landed overdamped. Its reported `timescale_ms` of 7 ms is `bin_ms / γ`, which is a decay time only in the underdamped/critically damped regimes... the blue curve is visibly the slowest decaying expert, not a 7 ms one. The 7 ms also comes from a bad median... the channel γ values are `[0.22, 0.26, 0.34, 1.31, 4.26, 4.61, 6.32, 7.11]`, so the median 2.78 sits in an empty gap. And `1/median(γ)` vs `median(1/γ)` gives 9.48 vs 6.82... not quoting 9.48×.
+In seed 2, layer 2, band 1 is the only expert in these runs that landed overdamped. Its reported `timescale_ms` of 7 ms is `bin_ms / γ`, which is a decay time only in the underdamped/critically damped regimes... the blue curve is visibly the slowest decaying expert, not a 7 ms one. The 7 ms also comes from a bad median... the channel γ values are `[0.22, 0.26, 0.34, 1.31, 4.26, 4.61, 6.32, 7.11]`, so the median 2.78 sits in an empty gap. And `1/median(γ)` vs `median(1/γ)` gives 9.48 vs 6.82... not quoting 9.48 times.
 
-Seed 1’s 2.11× (36 vs 76 ms, both underdamped) looked clean but isn’t. In layer 2, the check puts weight 1.000 on expert 3, the only expert that moved from init... experts 0-2 stayed near 0.3 and never trained. So the ratio is one trained expert against three frozen ones. Check weight scales the gradient. With no load balancing loss, once the check saturates the others stop learning. Rule 2 therefore cannot distinguish specialization from frozen at init. That is a flaw in the rule.
+Seed 1’s 2.11 times (36 vs 76 ms, both underdamped) looked clean but isn’t. In layer 2, the check puts weight 1.000 on expert 3, the only expert that moved from init... experts 0-2 stayed near 0.3 and never trained. So the ratio is one trained expert against three frozen ones. Check weight scales the gradient. With no load balancing loss, once the check saturates the others stop learning. Rule 2 therefore cannot distinguish specialization from frozen at init. That is a flaw in the rule.
 
 Everything else is normal... 30-81 ms, underdamped, settling within 400 ms... per-channel timescales inside a live expert range from about 16 to 93 ms.
 
@@ -221,7 +221,7 @@ So at max, the router learned a stimulus-present/absent detector...but mostly le
 
 **Rule 1 (does it avoid collapsing to linear?)** NAH: +0.61/+3.17/+2.37, mean 2.046 against a 2σ threshold of 2.616. Positive in every seed, not separable from seed noise.
 
-**Rule 2 (do experts specialise in timescale?)** YEAH: 2 of 3 seeds at 2.11× and 9.48×, with the problem of how I measured it.
+**Rule 2 (do experts specialise in timescale?)** YEAH: 2 of 3 seeds at 2.11 times and 9.48 times, with the problem of how I measured it.
 
 AND the thing that overshadows both... the headline model scores -1.59 mean normalised R² against a mean-predictor floor of 0.145, while stopping at best epoch 38/39/40 of 40 with patience never firing. I am not going to interpret "the spectral MoE loses to predicting each neuron's average" until I know what the epoch cap cost.
 
@@ -292,7 +292,7 @@ Here's what I know in the end.
 
 + **MoE vs ablations**... `moe_full` beat `moe_linear` in all three seeds (+0.61 / +3.17 / +2.37)... but the mean difference, 2.046, didn't clear twice the seed spread, 2.617. My commited rule 1 is not met. Against `moe_single` and `chebgru`, signs were mixed. Three seeds was too little resolution.
 
-+ **Specialisation and router**... rule 2 passes only on its letter. Two seeds show a 2×+ timescale ratio... but the checked layers compare one trained expert against three frozen ones. Not really fair tbh. Seed 2’s 9.48× becomes 6.82× under an equally defensible reading. Another flaw in my rule. The router is input-independent in every seed. R6 knockouts change seed-0 predictions only at 1e-7... three of four experts are inert. The architecture’s purpose never even engaged.
++ **Specialisation and router**... rule 2 passes only on its letter. Two seeds show a 2 times+ timescale ratio... but the checked layers compare one trained expert against three frozen ones. Not really fair tbh. Seed 2’s 9.48 times becomes 6.82 times under an equally defensible reading. Another flaw in my rule. The router is input-independent in every seed. R6 knockouts change seed-0 predictions only at 1e-7... three of four experts are inert. The architecture’s purpose never even engaged.
 
 + **The fly connectome**... Rewiring while preserving in-degree, out-degree, sign counts and weight multiset... displacing 94.4% of edges... costs 5.46 normalised R², clearing the 3.76 threshold with the same sign in all seeds. Direction doesn't matter... magnetic and symmetric bases are within noise, with symmetric nominally ahead despite 52.9% of reciprocal pairs disagreeing in sign. This is my only win.
 
